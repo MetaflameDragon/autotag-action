@@ -1,3 +1,11 @@
+# Preamble
+
+This is a fork of phish108's autotag-action, I wanted to quickly patch a few things in it for myself, as well as possibly add a feature or two.
+
+Previous description follows below:
+
+---
+
 # Autotag
 
 A lightning fast autotagger for `semver`-tagging. It helps you to stay on top of your release management and release your code quickly and often through GitHub's tag-based release functions just by pushing to your repository.
