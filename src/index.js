@@ -35,10 +35,10 @@ async function getLatestTag(octokit, boolAll = true) {
     // ensure the highest version number is the last element
     // strip all non version tags
     const allVTags = data
-        .filter(tag => semver.clean(tag.name) !== null);
+        .filter(tag => semver.clean(tag.name.replaceAll("_", "-")) !== null);
 
     allVTags
-        .sort((a, b) => semver.compare(semver.clean(a.name), semver.clean(b.name)));
+        .sort((a, b) => semver.compare(semver.clean(a.name.replaceAll("_", "-")), semver.clean(b.name.replaceAll("_", "-"))));
 
     if (boolAll) {
         return allVTags.pop();
@@ -47,7 +47,7 @@ async function getLatestTag(octokit, boolAll = true) {
     // filter prereleases
     // core.info("filter only main releases");
 
-    const filtered = allVTags.filter((b) => semver.prerelease(b.name) === null);
+    const filtered = allVTags.filter((b) => semver.prerelease(b.name.replaceAll("_", "-")) === null);
     const result = filtered.pop();
 
     return result;
@@ -251,7 +251,7 @@ async function action() {
 
         core.info(`The repo tags: ${ JSON.stringify(latestTag, undefined, 2) }`);
 
-        const version   = semver.clean(versionTag);
+        const version   = semver.clean(versionTag.replaceAll("_", "-"));
 
         nextVersion = semver.inc(
             version,
@@ -287,11 +287,11 @@ async function action() {
             core.info(`${ branchName } is a release branch`);
 
             if (msgLevel === "none") {
-                nextVersion = semver.inc(version, level);
+                nextVersion = semver.inc(version.replaceAll("_", "-"), level);
             }
             else {
                 core.info(`commit messages force bump level to ${msgLevel}`);
-                nextVersion = semver.inc(version, msgLevel);
+                nextVersion = semver.inc(version.replaceAll("_", "-"), msgLevel);
             }
         }
 
